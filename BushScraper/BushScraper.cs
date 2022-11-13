@@ -28,7 +28,14 @@ public class BushScraper
         _client = clientFactory.CreateClient() ?? throw new ArgumentNullException(nameof(clientFactory));
         _cosmosClient =
             new CosmosClient(Environment.GetEnvironmentVariable("COSMOS_ENDPOINT", EnvironmentVariableTarget.Process),
-                new DefaultAzureCredential());
+                new DefaultAzureCredential(), new CosmosClientOptions
+                {
+                    SerializerOptions = new CosmosSerializationOptions
+                    {
+                        PropertyNamingPolicy = CosmosPropertyNamingPolicy.CamelCase,
+                    },
+                    AllowBulkExecution = true,
+                });
     }
 
 
